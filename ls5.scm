@@ -1,6 +1,6 @@
 #lang racket
 
-(require "ls_base.scm")
+(require "ls_base.scm" rackunit)
 
 (provide rember* insertR* insertL* member* leftmost occur* subst*)
 
@@ -133,40 +133,40 @@
 
 ; unit test
 
-(equal?
+(check-equal?
 (rember* 'sauce
 '(((tomato sauce)) ((bean) sauce) (and ((flying)) sauce)))
 '(((tomato)) ((bean)) (and ((flying)))))
 
-(equal? (insertR* 'roast 'chuck
+(check-equal? (insertR* 'roast 'chuck
 '((how much (wood)) could ((a (wood) chuck)) (((chuck))) (if (a) ((wood chuck))) could chuck wood))
 '((how much (wood)) could ((a (wood) chuck roast)) (((chuck roast))) (if (a) ((wood chuck roast))) could chuck roast wood )
 )
 
-(equal? (occur* 'banana '((banana) (split ((((banana ice))) (cream (banana)) sherbet)) (banana) (bread) (banana brandy))) 5)
+(check-equal? (occur* 'banana '((banana) (split ((((banana ice))) (cream (banana)) sherbet)) (banana) (bread) (banana brandy))) 5)
 
-(equal? (subst* 'orange 'banana
+(check-equal? (subst* 'orange 'banana
 '((banana) (split ((((banana ice))) (cream (banana)) sherbet)) (banana) (bread) (banana brandy)))
 '((orange) (split ((((orange ice))) (cream (orange)) sherbet)) (orange) (bread) (orange brandy)))
 
-(equal? (insertL* 'pecker 'chuck
+(check-equal? (insertL* 'pecker 'chuck
 '((how much (wood)) could ((a (wood) chuck)) (((chuck))) (if (a) ((wood chuck))) could chuck wood))
 '((how much (wood)) could ((a (wood) pecker chuck)) (((pecker chuck))) (if (a) ((wood pecker chuck))) could pecker chuck wood))
 
-(member* 'chips '((potato) (chips ((with) fish) (chips))))
+(check-true (member* 'chips '((potato) (chips ((with) fish) (chips)))))
 
-(equal?
+(check-equal?
     (leftmost '((potato) (chips ((with) fish) (chips))))
     'potato)
 
-(not (eqlist
+(check-false (eqlist
 '(((tomato sauce)) ((bean) sauce) (and ((flying)) sauce))
 '(((tomato)) ((bean)) (and ((flying))))))
 
-(eqlist
+(check-true (eqlist
 '((how much (wood)) could ((a (wood) pecker chuck)) (((pecker chuck))) (if (a) ((wood pecker chuck))) could pecker chuck wood)
-'((how much (wood)) could ((a (wood) pecker chuck)) (((pecker chuck))) (if (a) ((wood pecker chuck))) could pecker chuck wood))
+'((how much (wood)) could ((a (wood) pecker chuck)) (((pecker chuck))) (if (a) ((wood pecker chuck))) could pecker chuck wood)))
 
-(not (eqlist
+(check-false (eqlist
 '((how much (wood)) could ((a (wood) pecker chuck)) (((pecker chuck))) (if (a) ((wood pecker chuck))) could pecker chuck wood)
 '((how much (wood)) could ((a (wood) pecker chuck)) (((pecker chalk))) (if (a) ((wood pecker chuck))) could pecker chuck wood)))

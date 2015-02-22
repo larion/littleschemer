@@ -1,7 +1,7 @@
 #lang racket
-; The little schemer ch. 1 2 3
+; The Little Schemer ch. 1 2 3
 
-(require "ls_base.scm")
+(require "ls_base.scm" rackunit)
 
 (provide lat? member? rember multirember firsts insertR multiinsertR insertL multiinsertL subst)
 
@@ -134,197 +134,197 @@
 ; unit tests
 
 ; UT multirember
-(equal? (multirember 1 '())
+(check-equal? (multirember 1 '())
         '())
-(equal? (multirember 1 '(2 1 3))
+(check-equal? (multirember 1 '(2 1 3))
         '(2 3))
-(equal? (multirember 1 '(2 1 1 1 3))
+(check-equal? (multirember 1 '(2 1 1 1 3))
         '(2 3))
-(equal? (multirember 1 '(2 2 1 1 1))
+(check-equal? (multirember 1 '(2 2 1 1 1))
         '(2 2))
-(equal? (multirember 1 '(1 1 1 2))
+(check-equal? (multirember 1 '(1 1 1 2))
         '(2))
-(equal? (multirember 100 '(100 1 100 2 100 3 100 4))
+(check-equal? (multirember 100 '(100 1 100 2 100 3 100 4))
         '(1 2 3 4))
-(equal? (multirember 100 '(1 100 2 100 3 100 4 100))
+(check-equal? (multirember 100 '(1 100 2 100 3 100 4 100))
         '(1 2 3 4))
 
 ; UT subst2
-(equal?
+(check-equal?
   (subst2 2 1 100 '(1 3 4))
   '(2 3 4))
-(equal?
+(check-equal?
   (subst2 5 3 100 '(1 3 4))
   '(1 5 4))
-(equal?
+(check-equal?
   (subst2 5 4 100 '(1 3 4))
   '(1 3 5))
-(equal?
+(check-equal?
   (subst2 5 6 100 '(1 3 4))
   '(1 3 4))
 
-(equal?
+(check-equal?
   (subst2 2 100 1 '(1 3 4))
   '(2 3 4))
-(equal?
+(check-equal?
   (subst2 5 100 3 '(1 3 4))
   '(1 5 4))
-(equal?
+(check-equal?
   (subst2 5 100 4 '(1 3 4))
   '(1 3 5))
-(equal?
+(check-equal?
   (subst2 5 100 6 '(1 3 4))
   '(1 3 4))
 
-(equal?
+(check-equal?
   (subst2 2 3 1 '(1 3 4))
   '(2 3 4))
-(equal?
+(check-equal?
   (subst2 5 4 3 '(1 3 4))
   '(1 5 4))
-(equal?
+(check-equal?
   (subst2 5 4 4 '(1 3 4))
   '(1 3 5))
 
 ; UT subst
-(equal?
+(check-equal?
   (subst 2 1 '(1 3 4))
   '(2 3 4))
-(equal?
+(check-equal?
   (subst 5 3 '(1 3 4))
   '(1 5 4))
-(equal?
+(check-equal?
   (subst 5 4 '(1 3 4))
   '(1 3 5))
-(equal?
+(check-equal?
   (subst 5 6 '(1 3 4))
   '(1 3 4))
 
 ; UT insertL
-(equal?
+(check-equal?
   (insertL 2 1 '(1 3 4))
   '(2 1 3 4))
-(equal?
+(check-equal?
   (insertL 5 3 '(1 3 4))
   '(1 5 3 4))
-(equal?
+(check-equal?
   (insertL 5 4 '(1 3 4))
   '(1 3 5 4))
-(equal?
+(check-equal?
   (insertL 5 6 '(1 3 4))
   '(1 3 4))
 
 ; UT multiinsertL
-(equal?
+(check-equal?
   (multiinsertL 2 1 '(1 3 4))
   '(2 1 3 4))
-(equal?
+(check-equal?
   (multiinsertL 5 3 '(1 3 4))
   '(1 5 3 4))
-(equal?
+(check-equal?
   (multiinsertL 5 4 '(1 3 4))
   '(1 3 5 4))
-(equal?
+(check-equal?
   (multiinsertL 5 6 '(1 3 4))
   '(1 3 4))
 
-(equal?
+(check-equal?
   (multiinsertL 2 1 '(1 3 4 1))
   '(2 1 3 4 2 1))
-(equal?
+(check-equal?
   (multiinsertL 5 3 '(3 1 3 4))
   '(5 3 1 5 3 4))
-(equal?
+(check-equal?
   (multiinsertL 5 3 '(3 3 3 3))
   '(5 3 5 3 5 3 5 3))
-(equal?
+(check-equal?
   (multiinsertL 3 3 '(3 3 3))
   '(3 3 3 3 3 3))
 
 ; UT insertR
-(equal?
+(check-equal?
   (insertR 2 1 '(1 3 4))
   '(1 2 3 4))
-(equal?
+(check-equal?
   (insertR 5 3 '(1 3 4))
   '(1 3 5 4))
-(equal?
+(check-equal?
   (insertR 5 4 '(1 3 4))
   '(1 3 4 5))
-(equal?
+(check-equal?
   (insertR 5 6 '(1 3 4))
   '(1 3 4))
 
 ; UT multiinsertR
-(equal?
+(check-equal?
   (multiinsertR 2 1 '(1 3 4))
   '(1 2 3 4))
-(equal?
+(check-equal?
   (multiinsertR 5 3 '(1 3 4))
   '(1 3 5 4))
-(equal?
+(check-equal?
   (multiinsertR 5 4 '(1 3 4))
   '(1 3 4 5))
-(equal?
+(check-equal?
   (multiinsertR 5 6 '(1 3 4))
   '(1 3 4))
 
-(equal?
+(check-equal?
   (multiinsertR 2 1 '(1 3 4 1))
   '(1 2 3 4 1 2))
-(equal?
+(check-equal?
   (multiinsertR 5 3 '(3 1 3 4))
   '(3 5 1 3 5 4))
-(equal?
+(check-equal?
   (multiinsertR 5 3 '(3 3 3 3))
   '(3 5 3 5 3 5 3 5))
-(equal?
+(check-equal?
   (multiinsertR 3 3 '(3 3 3))
   '(3 3 3 3 3 3))
 
 ; UT firsts
-(equal?
+(check-equal?
   (firsts '())
   '())
-(equal?
+(check-equal?
   (firsts '((1 10 20) (2 40 50 60) (3 70 80) (4)))
   '(1 2 3 4))
 
 ; UT lat?
-(lat? `(1 2 3 4))
-(lat? `(5))
-(lat? `())
-(not (lat? `(1 (2 3) 4)))
-(not (lat? `((1 2 3 4))))
-(not (lat? `((1 2) 3 4)))
-(not (lat? `(1 2 (3 4))))
+(check-true (lat? `(1 2 3 4)))
+(check-true (lat? `(5)))
+(check-true (lat? `()))
+(check-false(lat? `(1 (2 3) 4)))
+(check-false(lat? `((1 2 3 4))))
+(check-false(lat? `((1 2) 3 4)))
+(check-false(lat? `(1 2 (3 4))))
 
 ; UT member?
-(member? 2 '(1 2 3 4))
-(member? 1 '(1 2 3 4))
-(member? 4 '(1 2 3 4))
-(not (member? 5 '(1 2 3 4)))
-(not (member? 2 '()))
+(check-true (member? 2 '(1 2 3 4)))
+(check-true (member? 1 '(1 2 3 4)))
+(check-true (member? 4 '(1 2 3 4)))
+(check-false (member? 5 '(1 2 3 4)))
+(check-false (member? 2 '()))
 
 ; UT rember
-(equal?
+(check-equal?
   (rember 1 '(1 2 3))
   '(2 3))
-(equal?
+(check-equal?
   (rember 2 '(1 2 3))
   '(1 3))
-(equal?
+(check-equal?
   (rember 3 '(1 2 3))
   '(1 2))
-(equal?
+(check-equal?
   (rember 1 '(1 2 3 1 2 3))
   '(2 3 1 2 3))
-(equal?
+(check-equal?
   (rember 2 '(1 2 3 1 2 3))
   '(1 3 1 2 3))
-(equal?
+(check-equal?
   (rember 3 '(1 2 3 1 2 3))
   '(1 2 1 2 3))
-(equal?
+(check-equal?
   (rember 4 '(1 2 3))
   '(1 2 3))

@@ -1,8 +1,8 @@
 #lang racket
 
-(require "ls123.scm" "ls_base.scm")
+(require "ls123.scm" "ls_base.scm" rackunit)
 
-(provide set? makeset subset? intersect? disjunct? intersect intersectall union fun? a-pair? first second build revrel)
+(provide set? makeset eqset? subset? intersect? disjunct? intersect intersectall union fun? a-pair? first second build revrel)
 
 (define set?
   (lambda (lat)
@@ -114,137 +114,137 @@
 
 ;; unit tests
 
-(not (a-pair? 'bla))
-(not (a-pair? '()))
-(not (a-pair? '3))
-(not (a-pair? '(1)))
-(not (a-pair? '(bla)))
-(not (a-pair? '(bla bla bla)))
-(not (a-pair? '(1 2 3)))
-(a-pair? '(1 2))
-(a-pair? '(bla bla))
+(check-false (a-pair? 'bla))
+(check-false (a-pair? '()))
+(check-false (a-pair? '3))
+(check-false (a-pair? '(1)))
+(check-false (a-pair? '(bla)))
+(check-false (a-pair? '(bla bla bla)))
+(check-false (a-pair? '(1 2 3)))
+(check-true (a-pair? '(1 2)))
+(check-true (a-pair? '(bla bla)))
 
-(equal?
+(check-equal?
   (first '(1 2))
   1)
-(equal?
+(check-equal?
   (first '(foo bar))
   'foo)
-(equal?
+(check-equal?
   (first '((((foo))) (bar)))
   '(((foo))) )
 
-(equal?
+(check-equal?
   (second '(1 2))
   2)
-(equal?
+(check-equal?
   (second '(foo bar))
   'bar)
-(equal?
+(check-equal?
   (second '((((foo))) (bar)))
   '(bar) )
-(equal?
+(check-equal?
   (build 'foo 'bar)
   '(foo bar))
-(equal?
+(check-equal?
   (build '((foo)) '(bar))
   '(((foo)) (bar)) )
 
-(fun? '((1 2) (2 2) (3 2)))
-(fun? '())
-(not (fun? '((1 2) (1 3))))
+(check-true (fun? '((1 2) (2 2) (3 2))))
+(check-true (fun? '()))
+(check-false (fun? '((1 2) (1 3))))
 
-(equal?
+(check-equal?
   (revrel '((1 2) (3 4)))
   '((2 1) (4 3)))
-(equal?
+(check-equal?
   (revrel '((1 2) (1 3) (1 5)))
   '((2 1) (3 1) (5 1)))
-(equal?
+(check-equal?
   (revrel '())
   '())
 
-(set? '())
-(set? '(pears))
-(set? '(apple pears strawberry))
-(set? '(1))
-(set? '(1 2 3 4 5 6 7 apple))
-(not (set? '(apple pears strawberry apple)))
-(not (set? '(apple pears strawberry pears)))
-(not (set? '(apple pears strawberry strawberry)))
-(not (set? '(apple apple strawberry)))
-(not (set? '(1 2 3 4 5 6 7 8 9 0 1 2 3)))
+(check-true (set? '()))
+(check-true (set? '(pears)))
+(check-true (set? '(apple pears strawberry)))
+(check-true (set? '(1)))
+(check-true (set? '(1 2 3 4 5 6 7 apple)))
+(check-false (set? '(apple pears strawberry apple)))
+(check-false (set? '(apple pears strawberry pears)))
+(check-false (set? '(apple pears strawberry strawberry)))
+(check-false (set? '(apple apple strawberry)))
+(check-false (set? '(1 2 3 4 5 6 7 8 9 0 1 2 3)))
 
-(equal?
+(check-equal?
   (makeset '(apple pear peach peach peach apple apple banana strawberry plum apple plum orange))
   '(pear peach banana strawberry apple plum orange))
 
-(equal?
+(check-equal?
   (makeset2 '(apple pear peach peach peach apple apple banana strawberry plum apple plum orange))
   '(apple pear peach banana strawberry plum orange))
 
-(subset? '(1 3 5) '(1 2 3 4 5 6 7 8 9 10))
-(subset? '() '(1 2 3 4 5 6 7 8 9 10))
-(subset? '(1 2 3 4 5 6 7 8 9 10) '(1 2 3 4 5 6 7 8 9 10))
-(not (subset? '(0) '(1 2 3 4 5 6 7 8 9 10)))
-(not (subset? '(0 1 2) '(1 2 3 4 5 6 7 8 9 10)))
+(check-true (subset? '(1 3 5) '(1 2 3 4 5 6 7 8 9 10)))
+(check-true (subset? '() '(1 2 3 4 5 6 7 8 9 10)))
+(check-true (subset? '(1 2 3 4 5 6 7 8 9 10) '(1 2 3 4 5 6 7 8 9 10)))
+(check-false (subset? '(0) '(1 2 3 4 5 6 7 8 9 10)))
+(check-false (subset? '(0 1 2) '(1 2 3 4 5 6 7 8 9 10)))
 
-(eqset? '(6 large chickens with wings) '(6 chickens with large wings))
-(eqset? '() '())
-(not (eqset? '(6 large chickens with wings) '(6 dogs with large wings)))
-(not (eqset? '(large chickens with wings) '(6 chickens with wings)))
-(not (eqset? '(6 small chickens with wings) '(6 large chickens with wings)))
+(check-true (eqset? '(6 large chickens with wings) '(6 chickens with large wings)))
+(check-true (eqset? '() '()))
+(check-false (eqset? '(6 large chickens with wings) '(6 dogs with large wings)))
+(check-false (eqset? '(large chickens with wings) '(6 chickens with wings)))
+(check-false (eqset? '(6 small chickens with wings) '(6 large chickens with wings)))
 
-(intersect? '(1 2 3) '(3 4 5))
-(intersect? '(1 2 3) '(1 5 6 7))
-(intersect? '(3 3 3) '(0 3 0))
-(not (intersect? '(1 2 3) '(4 5 6)))
-(not (intersect? '() '(4 5 6)))
+(check-true (intersect? '(1 2 3) '(3 4 5)))
+(check-true (intersect? '(1 2 3) '(1 5 6 7)))
+(check-true (intersect? '(3 3 3) '(0 3 0)))
+(check-false (intersect? '(1 2 3) '(4 5 6)))
+(check-false (intersect? '() '(4 5 6)))
 
-(not (disjunct? '(1 2 3) '(3 4 5)))
-(not (disjunct? '(1 2 3) '(1 5 6 7)))
-(not (disjunct? '(3 3 3) '(0 3 0)))
-(disjunct? '(1 2 3) '(4 5 6))
-(disjunct? '() '(4 5 6))
+(check-false (disjunct? '(1 2 3) '(3 4 5)))
+(check-false (disjunct? '(1 2 3) '(1 5 6 7)))
+(check-false (disjunct? '(3 3 3) '(0 3 0)))
+(check-true (disjunct? '(1 2 3) '(4 5 6)))
+(check-true (disjunct? '() '(4 5 6)))
 
-(equal?
+(check-equal?
   (intersect '(1 2 3) '(3 4 5))
   '(3))
-(equal?
+(check-equal?
   (intersect '(1 2 3) '(1 5 6 7))
   '(1))
-(equal?
+(check-equal?
   (intersect '(0 1 2 3 4 5 6 7 8 9 10) '(15 14 13 12 11 10 9 8 7 6 5))
   '(5 6 7 8 9 10))
-(equal?
+(check-equal?
   (intersect '(1 2 3) '(4 5 6))
   '())
-(equal?
+(check-equal?
   (intersect '() '(4 5 6))
   '())
 
-(equal?
+(check-equal?
   (union '(1 2 3) '(3 4 5))
   '(1 2 3 4 5))
-(equal?
+(check-equal?
   (union '(1 2 3) '(1 5 6 7))
   '(2 3 1 5 6 7))
-(equal?
+(check-equal?
   (union '(0 1 2 3 4 5 6 7 8 9 10) '(15 14 13 12 11 10 9 8 7 6 5))
   '(0 1 2 3 4 15 14 13 12 11 10 9 8 7 6 5))
-(equal?
+(check-equal?
   (union '(1 2 3) '(4 5 6))
   '(1 2 3 4 5 6))
-(equal?
+(check-equal?
   (union '() '(4 5 6))
   '(4 5 6))
 
-(equal?
+(check-equal?
   (intersectall '((a b c) (c a d e) (e f g h a b)))
   '(a))
-(equal?
+(check-equal?
   (intersectall '((a b c) (c a d e b) (e f g h a b)))
   '(a b))
-(equal?
+(check-equal?
   (intersectall '((c) (c a d e b) (e f g h a b)))
   '())

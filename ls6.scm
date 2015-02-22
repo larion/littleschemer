@@ -1,6 +1,6 @@
 #lang racket
 
-(require "ls_base.scm" "ls4.scm")
+(require "ls_base.scm" "ls4.scm" rackunit)
 
 (provide value value2 numbered?)
 
@@ -45,21 +45,21 @@
 
 ;; unit tests
 
-(numbered? '((1 + (2 + 3)) + (7 + 1000)))
-(numbered? '(1 + (27 + ((3 + 7) + 1000))))
-(numbered? '(1 + ((2 + 3) + (7 + 1000))))
-(numbered? '((1 + 2) + (3 + (7 + 1000))))
+(check-true (numbered? '((1 + (2 + 3)) + (7 + 1000))))
+(check-true (numbered? '(1 + (27 + ((3 + 7) + 1000)))))
+(check-true (numbered? '(1 + ((2 + 3) + (7 + 1000)))))
+(check-true (numbered? '((1 + 2) + (3 + (7 + 1000)))))
 
-(not (numbered? '((1 + (2 + cat)) + (7 + 1000))))
-(not (numbered? '(1 + (27 + ((3 + pudding) + 1000)))))
-(not (numbered? '(1 + ((2 + 3) + (7 + x)))))
-(not (numbered? '((1 + 2) + (foobar + (7 + 1000)))))
-(not (numbered? '((foo + bar) + (foobar + (bar + foo)))))
+(check-false (numbered? '((1 + (2 + cat)) + (7 + 1000))))
+(check-false (numbered? '(1 + (27 + ((3 + pudding) + 1000)))))
+(check-false (numbered? '(1 + ((2 + 3) + (7 + x)))))
+(check-false (numbered? '((1 + 2) + (foobar + (7 + 1000)))))
+(check-false (numbered? '((foo + bar) + (foobar + (bar + foo)))))
 
-(eq?
+(check-eq?
 (value '(1 + ((7 * 6) - ((5 ^ (5 - 3)) + (4 + (2 * 4))))))
 6)
 
-(eq?
+(check-eq?
 (value2 '(+ 1 (- (* 7 6) (+ (^ 5 (- 5 3)) (+ 4 (* 2 4))))))
 6)
